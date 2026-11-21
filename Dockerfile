@@ -16,6 +16,10 @@ RUN useradd --uid 10001 --no-create-home --shell /usr/sbin/nologin app
 WORKDIR /app
 COPY --from=build /app/.venv /app/.venv
 COPY app ./app
+# La imagen oficial de Python no trae el bytecode de la biblioteca estándar, y el usuario
+# sin privilegios no puede escribirlo: sin esto, cada proceso nuevo (el del healthcheck,
+# cada 10 s) recompila todo lo que importa.
+RUN python -m compileall -q -j 0 /usr/local/lib/python3.12 /app/app
 ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONUNBUFFERED=1 \
     PYTHONDONTWRITEBYTECODE=1 \
