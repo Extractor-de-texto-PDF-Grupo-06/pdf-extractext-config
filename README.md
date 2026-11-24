@@ -38,6 +38,14 @@ Por variables de entorno (ver `.env.example`):
 | `CONSUL_KV_ROOT` | `pdf-extractext` | Raíz del KV |
 | `CONSUL_TIMEOUT_SECONDS` | `2` | Espera antes de dar a Consul por caído |
 | `PORT` | `8000` | Puerto HTTP |
+| `SERVICE_REGISTRATION` | `false` | Registrarse en el catálogo de Consul al arrancar y darse de baja al apagarse |
+| `SERVICE_NAME` | `config` | Nombre en el catálogo |
+| `SERVICE_ADDRESS` | la IP del contenedor | Dirección con la que Consul y Traefik llegan a esta réplica |
+| `SERVICE_TAGS` | `[]` | Etiquetas en JSON; en el sistema, las de Traefik que arman la ruta `/config` |
+
+Con el registro activado, Traefik descubre config por el catálogo de Consul (provider
+Consul Catalog) y Consul revisa su `/health` cada 5 segundos. Si Consul no responde al
+arrancar, config arranca igual y lo avisa en el log.
 
 ## Desarrollo
 
