@@ -14,3 +14,13 @@ class Settings(BaseSettings):
     consul_timeout_seconds: float = 2.0
     # Puerto HTTP del servicio (factor VII).
     port: int = 8000
+
+    # Registro en el catálogo de Consul, para que Traefik descubra config (provider Consul
+    # Catalog). Apagado por defecto: en desarrollo y en los tests no hay a quién avisarle.
+    service_registration: bool = False
+    service_name: str = "config"
+    # Dirección con la que Consul y Traefik llegan a esta réplica. Sin valor, la IP propia.
+    service_address: str | None = None
+    # Las etiquetas de Traefik (rutas y middlewares). Las decide quien despliega, no config.
+    # En JSON, porque una etiqueta puede tener comas: ["traefik.enable=true", "..."].
+    service_tags: list[str] = []
